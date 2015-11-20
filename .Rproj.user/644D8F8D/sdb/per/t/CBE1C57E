@@ -1,0 +1,18 @@
+{
+    "contents" : "library(sqldf)\nlibrary(plyr)\nsetwd('/home/aman/Documents/learn/kaggle/Employee_Access_Challenge/')\n\ntrain <- read.table('./train.csv', header = TRUE,  colClasses = c('integer'), sep = \",\")\ntest <- read.csv('./test.csv', colClasses)\n\nsum(train$ACTION)/length(train$ACTION) #turns out to be 94.21% hence data totally skewed\n\n#Finding the number of unique levels in each column\nuniqueCount = function(column){\n  length(unique(column))\n}\n\napply(train, 2, uniqueCount)\n\n\n#making unique combinations\n#i.e. grouping on multiple columns\nfeature.colnames <- (colnames(train))[-c(1:2)]\nfeature.colnames\n\nid.num <- 0\ntrain.pids <- ddply(train, feature.colnames, function(x) {\n  id.num <<- id.num + 1\n  cbind(PID=id.num, x)\n})\n\nplot(train$ROLE_TITLE, train$ROLE_CODE)\n\nx <- train\nfor(i in 1:ncol(x)) {\n  the_names <- names(sort(table(train[,i]), decreasing = T)[1:2])\n  x[!x[,i] %in% the_names, i] <- 'other'\n}\nView(x)\n",
+    "created" : 1446010277100.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3467008360",
+    "id" : "CBE1C57E",
+    "lastKnownWriteTime" : 1447922669,
+    "path" : "~/Documents/learn/kaggle/Employee_Access_Challenge/play.R",
+    "project_path" : "play.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "type" : "r_source"
+}
